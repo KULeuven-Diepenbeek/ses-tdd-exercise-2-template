@@ -2,6 +2,10 @@
 
 Oefeningen voor https://brainbaking.com/teaching/ses/
 
+## Technologie
+
+Test harnas met JUnit 5. [JUnit documentatie](https://junit.org/junit5/docs/current/user-guide/).
+
 ## Opgave
 
 ### 1. Misluke login pogingen
