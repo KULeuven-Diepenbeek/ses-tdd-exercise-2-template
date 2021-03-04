@@ -1,6 +1,6 @@
 # SES TDD Exercise 2
 
-Oefeningen voor https://brainbaking.com/teaching/ses/
+Oefeningen voor https://kuleuven-diepenbeek.github.io/ses-course/tdd/
 
 ## Technologie
 
