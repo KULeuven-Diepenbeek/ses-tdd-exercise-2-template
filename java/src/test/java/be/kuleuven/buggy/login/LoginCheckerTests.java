@@ -2,7 +2,7 @@ package be.kuleuven.buggy.login;
 
 import org.junit.jupiter.api.Test;
 
-public class LoginAttemptTests {
+public class LoginCheckerTests {
 
     @Test
     public void control_shouldDoSomething() {

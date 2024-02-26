@@ -12,25 +12,46 @@ Test harnas met JUnit 5. [JUnit documentatie](https://junit.org/junit5/docs/curr
 
 Onze klanten meldden de volgende bug:
 
-> Abigail is able to log in, but Jos is not. Can you please fix this ASAP so Jos can get back to work again?
+> Abigail is able to log in, but Jos is not always able to. Can you please fix this ASAP so jos can get back to work again?
 >
 > Thanks!
 >
-> PS: last week I also reported a bug that people with an underscore in their username also couldn't log in.
->
-> PPS: If you don't fix this IN PRODUCTION within 30 minutes the company will lose 100.000 EUR!!!!
+> PS: If you don't fix this IN PRODUCTION within 30 minutes the company will lose 100.000 EUR!!!!
 
-De senior programmeur in ons team heeft de bug geïdentificeerd en beweert dat het in een stukje _oude code_ zit, 
-maar hij heeft geen tijd om dit op te lossen. Nu is het aan jou.
+Er is een foutje geslopen in de login module, waardoor `Abigail` altijd kan inloggen, maar `jos` soms wel en soms niet. De senior programmeur in ons team heeft de bug geïdentificeerd en beweert dat het in een stukje _oude code_ zit, 
+maar hij heeft geen tijd om dit op te lossen. Nu is het aan jou. De `logins.json` file bevat alle geldige login namen die mogen inloggen. Er kan kunnen geen twee gebruikers met dezelfde voornaam zijn.
+(Andere namen die moeten kunnen inloggen zijn "James", "Emma", "Isabella" ...)
+(Andere namen die niet mogen kunnen inloggen zijn "Arne", "Kris", "Markske" ...)
 
 ```java
-public static boolean control(String username) {
-    Pattern pattern = Pattern.compile("^(?=[a-z]{2})(?=.{4,26})(?=[^.]*\\.?[^.]*$)(?=[^_]*_?[^_]*$)[\\w.]+$", CASE_INSENSITIVE);
-    return pattern.matcher(username).matches();
+public class LoginChecker {
+    public static boolean control(String username) {
+        ArrayList<String> loginList = new ArrayList<>();
+        try {
+            Gson gson = new Gson();
+            JsonReader reader = new JsonReader(new FileReader("./logins.json"));
+            JsonArray data = gson.fromJson(reader, JsonArray.class);
+            for (JsonElement jo : data) {
+                String login = gson.fromJson(jo, String.class);
+                loginList.add(login);
+            }
+        }catch(FileNotFoundException fnfe){
+            fnfe.printStackTrace();
+        }
+
+        boolean found = false;
+        for (String naam : loginList) {
+            if (naam.equals(username)) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
 }
 ```
 
-Deze functie geeft `true` terug als Abigail probeert in te loggen, en `false` als Jos probeert in te loggen.
+Deze methode geeft `true` terug als Abigail probeert in te loggen, en soms `false` als jos probeert in te loggen.
 
 Hoe komt dit? Schrijf éérst een falende test!
 
